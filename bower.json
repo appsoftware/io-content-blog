@@ -1,0 +1,33 @@
+{
+  "name": "io-content-example-blog",
+  "homepage": "https://github.com/appsoftware/io-content-example-blog",
+  "authors": [
+    "Gareth Brown <gareth.brown@appsoftware.com>"
+  ],
+  "description": "A simple HTML, CSS and JS blog running using iocontent.com API CMS for content management",
+  "main": "index.html",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "CMS",
+    "API",
+    "blog"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "io-content-js": "~1.1.2",
+    "github-markdown-css": "~2.1.0",
+    "angular": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-touch": "~1.4.7",
+    "gridism": "~0.2.1"
+  }
+}
