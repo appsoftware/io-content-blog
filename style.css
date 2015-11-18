@@ -19,7 +19,14 @@ div#content-main hr {
 	margin-bottom: 0;
 }
 
+div#content-main ul 
+{
+	padding-left: 0;
+}
+
 div#content-main ul li {
 	
 	list-style-type: none;
+	border-bottom: 1px solid #efefef;
+	padding: 10px 0;
 }
