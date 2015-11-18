@@ -18,13 +18,13 @@
 	
 	<div class="unit three-quarters">
 
-		<div><strong><a href="index.html">Home</a></strong> <span>/</span> <strong id="bread-crumb-current"></strong></div> 
+		<div><strong><a href="/">Home</a></strong> <span>/</span> <strong>{{contentCurrent.title}}</strong></div> 
 		
-		<h1 id="title-header"></h1>
+		<h1>{{contentCurrent.title}}</h1>
 	
-		<p>Published: <span id="publish-date"></span></p>
+		<p>Published: <span>{{contentCurrent.publicPublishDate | date}}</span></p>
 
-		<div id="cms-content-place-holder"></div>
+		<div ng-bind-html="contentCurrent.content"></div>
 		
 	</div>
 	<div class="unit one-quarter">
@@ -36,7 +36,7 @@
 				
 				<!-- Link click will not refresh the page, but content is loaded and URL is updated -->
 				
-				<a href="#!/blog/{{contentEntry.key}}" class="link">{{contentEntry.title}}</a> 
+				<a href="{{contentEntry.blogUrl}}" class="link">{{contentEntry.title}}</a> 
 			</li>
 		</ul>
 		

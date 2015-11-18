@@ -14,7 +14,8 @@
 
 	<div ng-view></div>
 
-	
+
+
 	<div id="disqus_thread"></div>
 	<script>
 	/**
@@ -50,6 +51,7 @@
 	<script src="bower_components/angular/angular.min.js"></script>
 	<script src="bower_components/angular-route/angular-route.min.js"></script>
 	<script src="bower_components/angular-touch/angular-touch.min.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 	
 	<!-- angular app -->
 
@@ -61,7 +63,7 @@
 			
 			angular
 			
-			.module('appMain', ['ng', 'ngRoute', 'ngTouch'])
+			.module('appMain', ['ng', 'ngRoute', 'ngTouch', 'ngSanitize'])
 			.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 	
 				$routeProvider
@@ -69,7 +71,7 @@
 									templateUrl: 'template.html',
 									controller: 'blogController'
 								})
-								.when('/blog/:contentKey', {
+								.when('/blog/:contentKey/:contentSeoTitle', {
 									templateUrl: 'template.html',
 									controller: 'blogController'
 								})
@@ -80,7 +82,6 @@
 				// html5Mode required for querystring parameter search ($location)
 	
 				$locationProvider.html5Mode(false);
-				$locationProvider.hashPrefix('!');
 			}]);
 		})();
 
@@ -91,6 +92,16 @@
 			angular.module('appMain')
 
 				.controller('blogController', ['$scope', '$routeParams', '$location', function ($scope, $routeParams, $location) {
+					
+					var toHypenCase = function (str) {
+						
+						return str.replace(/\s+/g, '-').toLowerCase();
+					}
+					
+					var getBlogUrl = function (contentKey, contentTitle) {
+						
+						return '/#/blog/' + contentKey + '/' + toHypenCase(contentTitle);
+					}
 					
 					// Simple routing mechanism using Angulars location service
 					
@@ -105,6 +116,8 @@
 
 					contentClient.contentClientBaseParameters.subAccountKey = 'nl7bwlc4txh2uvw3s6h4gcclgb';
 					contentClient.contentClientBaseParameters.contentType = 'blog-article';
+
+					$scope.contentCurrent = {};
 
 					$scope.blog = {
 
@@ -122,13 +135,20 @@
 
 								// In JS api, an array of content objects is always returned, even
 								// where the query would always limit the result set to a single content entity
-
+								
+								var contentCurrent = responseObj[0];
+								
+							
+								$scope.contentCurrent = contentCurrent;
+								
+								$scope.$apply();
+								
 								document.title = responseObj[0].title;
 
-								document.getElementById('bread-crumb-current').innerHTML = responseObj[0].title;
-								document.getElementById('title-header').innerHTML = responseObj[0].title;
-								document.getElementById('publish-date').innerHTML = responseObj[0].publicPublishDate;
-								document.getElementById('cms-content-place-holder').innerHTML = responseObj[0].content;
+								// document.getElementById('bread-crumb-current').innerHTML = responseObj[0].title;
+								// document.getElementById('title-header').innerHTML = responseObj[0].title;
+								// document.getElementById('publish-date').innerHTML = responseObj[0].publicPublishDate;
+								// document.getElementById('cms-content-place-holder').innerHTML = responseObj[0].content;
 								
 								// https://help.disqus.com/customer/portal/articles/472107-using-disqus-on-ajax-sites
 								
@@ -138,8 +158,8 @@
 								DISQUS.reset({
 									reload: true,
 									config: function () {  
-										this.page.identifier = 'id-' + responseObj[0].key;  
-										this.page.url = 'http://blog.iocontent.com/index.html?key=' + responseObj[0].key;
+										this.page.identifier = 'id-' + contentCurrent.key;  
+										this.page.url = getBlogUrl(contentCurrent.key, toHypenCase(contentCurrent.title));
 										this.page.title = responseObj[0].title;
 										this.language = 'en';
 									}
@@ -161,6 +181,11 @@
 							var apiCallBack = function (responseJson) {
 
 								blog.contentEntryList = JSON.parse(responseJson); // [] of content entries
+								
+								for(var i= 0; i < blog.contentEntryList.length; i++)
+								{
+									blog.contentEntryList[i].blogUrl = getBlogUrl(blog.contentEntryList[i].key, toHypenCase(blog.contentEntryList[i].title));
+								}
 								
 								var loadKey = contentKey != null ? contentKey : blog.contentEntryList[0].key;
 								

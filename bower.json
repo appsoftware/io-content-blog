@@ -28,6 +28,7 @@
     "angular": "~1.4.7",
     "angular-route": "~1.4.7",
     "angular-touch": "~1.4.7",
-    "gridism": "~0.2.1"
+    "gridism": "~0.2.1",
+    "angular-sanitize": "~1.4.7"
   }
 }
