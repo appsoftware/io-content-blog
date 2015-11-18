@@ -1,0 +1,46 @@
+<div class="grid">
+	
+	<div class="unit whole">
+
+		<div>
+			<img src="https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?max-height=80" alt="logo" />
+		</div>
+		<div>
+			<hr />
+			<p>A simple HTML, JS and CSS blog example running on I/O Content CMS API</p>
+			<hr />
+		</div>
+	</div>
+</div>
+
+
+<div class="grid">
+	
+	<div class="unit three-quarters">
+
+		<div><strong><a href="index.html">Home</a></strong> <span>/</span> <strong id="bread-crumb-current"></strong></div> 
+		
+		<h1 id="title-header"></h1>
+	
+		<p>Published: <span id="publish-date"></span></p>
+
+		<div id="cms-content-place-holder"></div>
+		
+	</div>
+	<div class="unit one-quarter">
+
+		<strong>Recent articles</strong>
+		
+		<ul>
+			<li ng-repeat="contentEntry in blog.contentEntryList">
+				
+				<!-- Link click will not refresh the page, but content is loaded and URL is updated -->
+				
+				<a href="#!/blog/{{contentEntry.key}}" class="link">{{contentEntry.title}}</a> 
+			</li>
+		</ul>
+		
+	</div>
+
+	
+</div>

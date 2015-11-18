@@ -7,94 +7,41 @@
 	<link rel="stylesheet" type="text/css" href="bower_components/gridism/gridism.css" />
 	<link rel="stylesheet" type="text/css" href="bower_components/github-markdown-css/github-markdown.css" />
 
-	<!-- Base href needed for AngularJs $locationProvider.html5Mode -->
-
-	<base href="/" />
-
 	<title></title>
 
 </head>
 <body class="markdown-body">
 
-	<div ng-controller="blogController" >
-		
-		<div class="grid">
-			
-			<div class="unit whole">
-	
-				<div>
-					<img src="https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?max-height=80" alt="logo" />
-				</div>
-				<div>
-					<hr />
-					<p>A simple HTML, JS and CSS blog example running on I/O Content CMS API</p>
-					<hr />
-				</div>
-			</div>
-		</div>
+	<div ng-view></div>
 
-
-		<div class="grid">
-			
-			<div class="unit three-quarters">
 	
-				<div><strong><a href="index.html">Home</a></strong> <span>/</span> <strong id="bread-crumb-current"></strong></div> 
-				
-				<h1 id="title-header"></h1>
-			
-				<p>Published: <span id="publish-date"></span></p>
-
-				<div id="cms-content-place-holder"></div>
-				
-			</div>
-			<div class="unit one-quarter">
-
-				<strong>Recent articles</strong>
-				
-				<ul>
-					<li ng-repeat="contentEntry in blog.contentEntryList">
-						
-						<!-- Link click will not refresh the page, but content is loaded and URL is updated -->
-						
-						<a href="index.html?key={{contentEntry.key}}" ng-click="blog.loadSingleBlogEntry(contentEntry.key)" class="link">{{contentEntry.title}}</a> 
-					</li>
-				</ul>
-				
-			</div>
+	<div id="disqus_thread"></div>
+	<script>
+	/**
+	* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+	*/
 	
-			
-		</div>
-		<!-- disqus_r3p953ULyw short code? -->
-		
-		<div id="disqus_thread"></div>
-		<script>
-		/**
-		* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-		* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-		*/
-		
-		// Ignore standard disquss init config, see reset ran on article
-		// load required for spa sites.
-		
-		// var disqus_config = function () {
-		//  	this.page.url = 'index.html?key={{contentEntry.key}}'; // Replace PAGE_URL with your page's canonical URL variable
-		//  	this.page.identifier = 'test-{{contentEntry.key}}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-		//  	this.page.title = '{{contentEntry.title}}';
-		//  	this.page.language = 'en';
-		//  };
-		
-		(function() { // DON'T EDIT BELOW THIS LINE
-		var d = document, s = d.createElement('script');
-		
-		s.src = '//iocontent.disqus.com/embed.js';
-		
-		s.setAttribute('data-timestamp', +new Date());
-		(d.head || d.body).appendChild(s);
-		})();
-		</script>
-		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+	// Ignore standard disquss init config, see reset ran on article
+	// load required for spa sites.
 	
-	</div>
+	// var disqus_config = function () {
+	//  	this.page.url = 'index.html?key={{contentEntry.key}}'; // Replace PAGE_URL with your page's canonical URL variable
+	//  	this.page.identifier = 'test-{{contentEntry.key}}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	//  	this.page.title = '{{contentEntry.title}}';
+	//  	this.page.language = 'en';
+	//  };
+	
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	
+	s.src = '//iocontent.disqus.com/embed.js';
+	
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 
 	<!-- i/o content api -->
 
@@ -115,11 +62,25 @@
 			angular
 			
 			.module('appMain', ['ng', 'ngRoute', 'ngTouch'])
-			.config(['$locationProvider', function ($locationProvider) {
+			.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+	
+				$routeProvider
+								.when('/', {
+									templateUrl: 'template.html',
+									controller: 'blogController'
+								})
+								.when('/blog/:contentKey', {
+									templateUrl: 'template.html',
+									controller: 'blogController'
+								})
+								.otherwise({
+									redirectTo: '/'
+								});
 	
 				// html5Mode required for querystring parameter search ($location)
 	
-				$locationProvider.html5Mode(true);
+				$locationProvider.html5Mode(false);
+				$locationProvider.hashPrefix('!');
 			}]);
 		})();
 
@@ -129,11 +90,13 @@
 
 			angular.module('appMain')
 
-				.controller('blogController', ['$scope', '$location', function ($scope, $location) {
+				.controller('blogController', ['$scope', '$routeParams', '$location', function ($scope, $routeParams, $location) {
 					
 					// Simple routing mechanism using Angulars location service
 					
-					var contentKey = $location.search().key; 
+					var contentKey = $routeParams.contentKey; 
+
+					console.log('contentKey', contentKey)
 
 					// Set up I/O Content ContentClient and configure sub account and 
 					// content type.
@@ -201,7 +164,10 @@
 								
 								var loadKey = contentKey != null ? contentKey : blog.contentEntryList[0].key;
 								
-								$scope.blog.loadSingleBlogEntry(loadKey);
+								if(!$scope.contentKey)
+								{
+									$scope.blog.loadSingleBlogEntry(loadKey);
+								}
 								
 								$scope.$apply();
 							}
@@ -216,6 +182,11 @@
 					}
 
 					$scope.blog.loadContentEntryList();
+					
+					if($scope.contentKey)
+					{
+						$scope.blog.loadSingleBlogEntry($scope.contentKey);
+					}
 				}]);
 
 		})();
