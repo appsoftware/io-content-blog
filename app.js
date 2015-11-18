@@ -13,6 +13,14 @@ blogConfig = {
 	ioContentSubAccountKey: 'rimm2eskcb7fub66hczrfoqcpd',
 	ioContentContentType: 'blog-article',
 	
+	// The content type is expected to have the following property keys, without them
+	// additional code will need to be edited to reflect alternate property names
+	// on the response JSON
+	
+	// - title
+	// - publicPublishDate
+	// - content
+	
 	// Replace to change blog logo. Below is set to use I/O Content asset CDN using
 	// a url generated in I/O content asset management area
 	

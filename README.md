@@ -1,32 +1,77 @@
-# I/O Content Example Blog
+# I/O Content Blog
 
 ## A simple HTML, JS and CSS blog backed by [I/O Content](http://www.icontent.com) API driven CMS
 
-This simple blog is an example of how [I/O Content](http://www.icontent.com) can be used to manage content for websites. You can also use this example to run your blog using content in your I/O Content account.
+This simple blog is the official I/O Content blog code, and an example of how [I/O Content](http://www.icontent.com) can be used to manage content for websites. You can also use this example to run your blog using content in your I/O Content account. The blog includes [Disqus](https://disqus.com/) comments integration
 
 
-The **[Demo](http://exampleblog.iocontent.com/index.html?key=xtun42ocqlxeu56wim5s3ccuma)** is hosted on Amazon S3 using S3's [static website](http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html) feature.
+The **[Demo](http://blog.iocontent.com/)** is hosted on Amazon S3 using S3's [static website](http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html) feature. It could also be hosted on [GitHub pages](https://pages.github.com/) or any other static website hosting.
 
 This blog uses simple HTML, JS and CSS, backed by the I/O Content API which serves content entries in response to a query sent over an HTTP GET request using the [io-content-js](https://github.com/appsoftware/io-content-js) library. 
 
-The only required files required to run this blog are the `index.html` file and the `bower_components` folder.
+The required files required to run this blog are the `index.html`, `template.html`, `app.js`, `style.css`  and the `bower_components` folder.
 
-![alternate text](https://cdn.iocontent.com/api/v1.0/assets/nl7bwlc4txh2uvw3s6h4gcclgb/20151113-121206643/062b/example-blog-required-files.png)
+![alternate text](https://cdn.iocontent.com/api/v1.0/assets/rimm2eskcb7fub66hczrfoqcpd/20151118-124147243/bbcj/iocontent-blog-deploy-files.png)
 
-*Note this demo is not available as a bower package, and all dependencies have been copied to the respository so you can simply copy deploy this website on any web server. This will not run from the local file system, so you will need to run via your local web server (e.g. Apache / IIS) to test.*
+*Note this blog is not available as a bower package, and all dependencies have been copied to the respository so you can simply copy deploy this website on any web server. This will not run from the local file system, so you will need to run via your local web server (e.g. Apache / IIS) to test.*
 
-## How this example blog works
+## Configuring ths blog
 
 This example pulls content hosted in our 'blog-example' sub account. You'll need to set up you're own sub account and content types and edit the sample as appropriate. Full [documentation](https://github.com/appsoftware/io-content-docs)  for I/O Content describes how to manage content, set up content types and query the API.
 
-The dependencies for this example are:
+Once you have an account at I/O Content, open up app.js and edit blogConfig at the top of the file:
+
+```
+// *********************************************
+// Edit blog config as required
+// *********************************************
+
+blogConfig = {
+	
+	// Set ioContentSubAccountKey and ioContentContentType according
+	// to the sub account key assigned when you created the sub account that
+	// under which this blog article has been published, and ioContentContentType
+	// according to the appropriate content type under that sub account 
+	
+	ioContentSubAccountKey: '<YOUR SUB ACCOUNT KEY>', // e.g. rimm2eskcb7fub66hczrfoqcpd
+	ioContentContentType: '<YOUR CONTENT TYPE>',      // e.g. e.g. blog-article
+	
+	// The content type is expected to have the following property keys, without them
+	// additional code will need to be edited to reflect alternate property names
+	// on the response JSON
+	
+	// - title
+	// - publicPublishDate
+	// - content
+
+	// Replace to change blog logo. Below is set to use I/O Content asset CDN using
+	// a url generated in I/O content asset management area
+	
+	logoImageSrc: '<YOUR LOGO URL>'
+
+	// Replace to change blog strapline txt
+	
+	strapLineText:  '<YOUR STRAP LINE>', // e.g. What my blog's all about
+	
+	// Set null to disable disqus comments
+	
+	disqusShortName: '<YOUR DISQUSS SHORT NAME>', 
+};
+```
+
+
+The dependencies for this project are:
 
 - [io-content-js](https://github.com/appsoftware/io-content-js) - for querying the I/O content API
 - [AngularJS](https://github.com/angular) - for rendering UI / managing routes
 - [gridism](https://github.com/cobyism/gridism) - for a light weight CSS grid
 - [github-markdown-css](https://github.com/sindresorhus/github-markdown-css) - simple markdown / html styling
 
-Note that I/O Content is queried via REST API, and [io-content-js](https://github.com/appsoftware/io-content-js) assists with making cross domain requests compatible with all major browsers.
+All dependencies are commited to this repository so there will be no need to reinstall from bower.
+
+Note that I/O Content is queried via REST API, and [io-content-js](https://github.com/appsoftware/io-content-js) simply assists with making cross domain requests compatible with all major browsers.
+
+## How content is loaded
 
 ### API Query
 
@@ -50,15 +95,10 @@ var apiCallBack = function (responseJson) {
 
 	blog.contentEntryList = JSON.parse(responseJson); // [] of content entries
 	
-	var loadKey = contentKey != null ? contentKey : blog.contentEntryList[0].key;
-	
-	$scope.blog.loadSingleBlogEntry(loadKey);
-	
-	$scope.$apply();
+	// ... logic for loading into view
 }
 
-// Since we are simply pulling all articles for purpose of creating side nav, 
-// only need to specify.
+// Set up the content query and make the request
 
 var query = 'orderByDescending=publicPublishDate&limit=20';
 
@@ -68,7 +108,7 @@ contentClient.get(query, apiCallBack);
 
 ### Content Assets
 
-Content Assets managed in I/O Content are loaded from our CDN using plain HTTPS urls. Where requesting images, our CDN offers 'on the fly' image resizing, specified here using the `?max-height=80` query string argument. Resized images are cached in the CDN for fast load times.
+Content Assets managed in I/O Content are loaded from our CDN using plain HTTPS urls. Where requesting images, our CDN offers 'on the fly' image resizing, specified here using the `max-height` query string argument. Resized images are cached in the CDN for fast load times.
 
 Other file types are also served over the CDN in the same manner.
 
