@@ -27,8 +27,8 @@
     "github-markdown-css": "~2.1.0",
     "angular": "~1.4.7",
     "angular-route": "~1.4.7",
-    "angular-touch": "~1.4.7",
     "gridism": "~0.2.1",
-    "angular-sanitize": "~1.4.7"
+    "angular-sanitize": "~1.4.7",
+    "angular-disqus": "~1.1.0"
   }
 }

@@ -13,41 +13,25 @@
 		
 		blogConfig = {
 			
-			ioContentSubAccountKey: 'nl7bwlc4txh2uvw3s6h4gcclgb',
+			ioContentSubAccountKey: 'rimm2eskcb7fub66hczrfoqcpd',
 			ioContentContentType: 'blog-article',
+			
+			// Set disqus short name here or leave null
+			// if disqus comments not required
+			
 			disqusShortName: 'iocontent',
 		}
 		
 	</script>
 
+	<base href="/"></base>
+	
 </head>
 <body class="markdown-body">
 
 	<div ng-view></div>
 
-	<!-- 
-	Load disqus scripts - note that initial config is commented out - all is handled
-	in reset on content load 
-	-->
-
-	<div id="disqus_thread"></div>
-	<script>
-		
-		/**
-		* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-		* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-		*/
-		
-		(function() { // DON'T EDIT BELOW THIS LINE
-		var d = document, s = d.createElement('script');
-		
-			s.src = '//' + blogConfig.disqusShortName + '.disqus.com/embed.js';
-			
-			s.setAttribute('data-timestamp', +new Date());
-			(d.head || d.body).appendChild(s);
-		})();
-	</script>
-	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+	
 
 	<!-- Load I/O content api -->
 
@@ -57,8 +41,9 @@
 
 	<script src="bower_components/angular/angular.min.js"></script>
 	<script src="bower_components/angular-route/angular-route.min.js"></script>
-	<script src="bower_components/angular-touch/angular-touch.min.js"></script>
 	<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+	
+	<script src="bower_components/angular-disqus/angular-disqus.min.js"></script>
 	
 	<!-- Angular app -->
 
@@ -70,8 +55,8 @@
 			
 			angular
 			
-			.module('appMain', ['ng', 'ngRoute', 'ngTouch', 'ngSanitize'])
-			.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+			.module('appMain', ['ng', 'ngRoute', 'ngSanitize', 'ngDisqus'])
+			.config(['$routeProvider', '$locationProvider', '$disqusProvider', function ($routeProvider, $locationProvider, $disqusProvider) {
 	
 				$routeProvider
 				.when('/', {
@@ -88,7 +73,12 @@
 	
 				// html5Mode required for querystring parameter search ($location)
 	
-				$locationProvider.html5Mode(false);
+				$locationProvider.html5Mode(false).hashPrefix('!');
+				
+				if(blogConfig.disqusShortName)
+				{
+					$disqusProvider.setShortname(blogConfig.disqusShortName)
+				}
 			}]);
 		})();
 
@@ -98,27 +88,25 @@
 
 			angular.module('appMain')
 
-				.controller('blogController', ['$scope', '$routeParams', '$location', function ($scope, $routeParams, $location) {
+				.controller('blogController', ['$scope', '$routeParams', function ($scope, $routeParams) {
 					
 					// Helper function for creating pretty seo text in url
 					
 					var toHypenCase = function (str) {
 						
-						return str.replace(/\s+/g, '-').toLowerCase();
+						return str.replace(/\W+/g, '-').toLowerCase();
 					}
 					
 					// Common url string generation from blog entry properties
 					
 					var getBlogUrl = function (contentKey, contentTitle) {
 						
-						return '/#/blog/' + contentKey + '/' + toHypenCase(contentTitle);
+						return '/#!/blog/' + contentKey + '/' + toHypenCase(contentTitle);
 					}
 					
 					// Simple routing mechanism using Angulars location service
 					
 					var contentKey = $routeParams.contentKey; 
-
-					console.log('contentKey', contentKey)
 
 					// Set up I/O Content ContentClient and configure sub account and 
 					// content type.
@@ -130,13 +118,13 @@
 
 					$scope.contentCurrent = {};
 
+					$scope.displayDisqussComments = blogConfig.disqusShortName ? true : false;
+
 					$scope.blog = {
 
 						contentEntryList: [],
 						
 						loadSingleBlogEntry: function (contentKey) {
-
-							console.log('load')
 
 							// Load full content for a single blog article
 
@@ -151,20 +139,7 @@
 
 								$scope.contentCurrent = contentCurrent;
 								
-								// https://help.disqus.com/customer/portal/articles/472107-using-disqus-on-ajax-sites
-								
-								// Discuss needs a full url and loads comments based on the id given. Tweak these values
-								// incase of issue
-						
-								DISQUS.reset({
-									reload: true,
-									config: function () {  
-										this.page.identifier = 'id-' + contentCurrent.key;  
-										this.page.url = getBlogUrl(contentCurrent.key, toHypenCase(contentCurrent.title));
-										this.page.title = contentCurrent.title;
-										this.language = 'en';
-									}
-								});
+								console.log($scope.contentCurrent)
 								
 								// Scope apply as this callback as async event
 								// not monitored by Angular
@@ -237,7 +212,6 @@
 				}]);
 
 		})();
-
 
 	</script>
 </body>
