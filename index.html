@@ -3,35 +3,19 @@
 <head>
 	
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	
+
 	<link rel="stylesheet" type="text/css" href="bower_components/gridism/gridism.css" />
 	<link rel="stylesheet" type="text/css" href="bower_components/github-markdown-css/github-markdown.css" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic' rel='stylesheet' type='text/css'>
 
 	<title></title>
 
-	<script>
-		
-		blogConfig = {
-			
-			ioContentSubAccountKey: 'rimm2eskcb7fub66hczrfoqcpd',
-			ioContentContentType: 'blog-article',
-			
-			// Set disqus short name here or leave null
-			// if disqus comments not required
-			
-			disqusShortName: 'iocontent',
-		}
-		
-	</script>
-
-	<base href="/"></base>
-	
 </head>
 <body class="markdown-body">
 
 	<div ng-view></div>
-
-	
 
 	<!-- Load I/O content api -->
 
@@ -43,175 +27,9 @@
 	<script src="bower_components/angular-route/angular-route.min.js"></script>
 	<script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 	
+	<!-- oad Angular Disqus https://github.com/kirstein/angular-disqus -->
+	
 	<script src="bower_components/angular-disqus/angular-disqus.min.js"></script>
 	
-	<!-- Angular app -->
-
-	<script>
-
-		(function () {
-
-			'use strict';
-			
-			angular
-			
-			.module('appMain', ['ng', 'ngRoute', 'ngSanitize', 'ngDisqus'])
-			.config(['$routeProvider', '$locationProvider', '$disqusProvider', function ($routeProvider, $locationProvider, $disqusProvider) {
-	
-				$routeProvider
-				.when('/', {
-					templateUrl: 'template.html',
-					controller: 'blogController'
-				})
-				.when('/blog/:contentKey/:contentSeoTitle', {
-					templateUrl: 'template.html',
-					controller: 'blogController'
-				})
-				.otherwise({
-					redirectTo: '/'
-				});
-	
-				// html5Mode required for querystring parameter search ($location)
-	
-				$locationProvider.html5Mode(false).hashPrefix('!');
-				
-				if(blogConfig.disqusShortName)
-				{
-					$disqusProvider.setShortname(blogConfig.disqusShortName)
-				}
-			}]);
-		})();
-
-		(function () {
-
-			'use strict';
-
-			angular.module('appMain')
-
-				.controller('blogController', ['$scope', '$routeParams', function ($scope, $routeParams) {
-					
-					// Helper function for creating pretty seo text in url
-					
-					var toHypenCase = function (str) {
-						
-						return str.replace(/\W+/g, '-').toLowerCase();
-					}
-					
-					// Common url string generation from blog entry properties
-					
-					var getBlogUrl = function (contentKey, contentTitle) {
-						
-						return '/#!/blog/' + contentKey + '/' + toHypenCase(contentTitle);
-					}
-					
-					// Simple routing mechanism using Angulars location service
-					
-					var contentKey = $routeParams.contentKey; 
-
-					// Set up I/O Content ContentClient and configure sub account and 
-					// content type.
-
-					var contentClient = new ContentClient();
-
-					contentClient.contentClientBaseParameters.subAccountKey = blogConfig.ioContentSubAccountKey;
-					contentClient.contentClientBaseParameters.contentType = blogConfig.ioContentContentType;
-
-					$scope.contentCurrent = {};
-
-					$scope.displayDisqussComments = blogConfig.disqusShortName ? true : false;
-
-					$scope.blog = {
-
-						contentEntryList: [],
-						
-						loadSingleBlogEntry: function (contentKey) {
-
-							// Load full content for a single blog article
-
-							var apiCallBack = function (responseJson) {
-
-								var responseObj = JSON.parse(responseJson);
-
-								// In JS api, an array of content objects is always returned, even
-								// where the query would always limit the result set to a single content entity
-								
-								var contentCurrent = responseObj[0];
-
-								$scope.contentCurrent = contentCurrent;
-								
-								console.log($scope.contentCurrent)
-								
-								// Scope apply as this callback as async event
-								// not monitored by Angular
-								
-								$scope.$apply();
-								
-								// Doc title needs to be set in plain JS as is out of scope of
-								// view controller
-								
-								if(contentCurrent && contentCurrent.title)
-								{
-									document.title = contentCurrent.title;
-								}
-							}
-							
-							// Construct single blog entry query and fetch
-							
-							var query = 'key.equals=' + contentKey + '&markdownToHtml=true';
-
-							contentClient.get(query, apiCallBack);
-						},
-						loadContentEntryList: function() {
-							
-							// Load a list of blog artciles to allow user to navigate
-							
-							var blog = this;
-							
-							var apiCallBack = function (responseJson) {
-
-								blog.contentEntryList = JSON.parse(responseJson); // [] of content entries
-								
-								for(var i= 0; i < blog.contentEntryList.length; i++)
-								{
-									blog.contentEntryList[i].blogUrl = getBlogUrl(blog.contentEntryList[i].key, toHypenCase(blog.contentEntryList[i].title));
-								}
-								
-								// If content key is not loaded on the route, load the most recent
-								// blog entry from the list
-								
-								var loadKey = contentKey != null ? contentKey : blog.contentEntryList[0].key;
-								
-								if(!$scope.contentKey)
-								{
-									$scope.blog.loadSingleBlogEntry(loadKey);
-								}
-								
-								// Scope apply as this callback as async event
-								// not monitored by Angular
-								
-								$scope.$apply();
-							}
-							
-							// Since we are simply pulling all articles for purpose of creating side nav, 
-							// only need to specify.
-							
-							var query = 'orderByDescending=publicPublishDate&limit=20';
-
-							contentClient.get(query, apiCallBack);
-						}
-					}
-
-					// Init
-
-					$scope.blog.loadContentEntryList();
-					
-					if($scope.contentKey)
-					{
-						$scope.blog.loadSingleBlogEntry($scope.contentKey);
-					}
-				}]);
-
-		})();
-
-	</script>
+	<script src="app.js"></script>
 </body>

@@ -1,48 +1,49 @@
-<div class="grid">
+<div id="content-main">
 	
-	<div class="unit whole">
-
-		<div>
-			<img src="https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?max-height=80" alt="logo" />
+	<div class="grid">
+		
+		<div class="unit whole">
+	
+			<div>
+				<img ng-src="{{blogConfig.logoImageSrc}}" alt="logo" />
+			</div>
+			<div class="strapline">
+				<span>{{blogConfig.strapLineText}}</p>
+				<hr />
+			</div>
 		</div>
-		<div>
-			<hr />
-			<p>A simple HTML, JS and CSS blog example running on I/O Content CMS API</p>
-			<hr />
+	</div>
+	
+	
+	<div class="grid">
+		
+		<div class="unit three-quarters">
+	
+			<div><strong><a href="/">Home</a></strong> <span>/</span> <strong>{{contentCurrent.title}}</strong></div> 
+			
+			<h1>{{contentCurrent.title}}</h1>
+		
+			<p>Published: <span>{{contentCurrent.publicPublishDate | date}}</span></p>
+	
+			<div ng-bind-html="contentCurrent.content"></div>
+			
+			<div ng-if="blogConfig.disqusShortName" disqus="contentCurrent.key"></div>
+			
 		</div>
-	</div>
-</div>
-
-
-<div class="grid">
+		<div class="unit one-quarter">
 	
-	<div class="unit three-quarters">
-
-		<div><strong><a href="/">Home</a></strong> <span>/</span> <strong>{{contentCurrent.title}}</strong></div> 
-		
-		<h1>{{contentCurrent.title}}</h1>
+			<strong>Recent articles</strong>
+			
+			<ul>
+				<li ng-repeat="contentEntry in blog.contentEntryList">
+					
+					<!-- Link click will not refresh the page, but content is loaded and URL is updated -->
+					
+					<a href="{{contentEntry.blogUrl}}" class="link">{{contentEntry.title}}</a> 
+				</li>
+			</ul>
+			
+		</div>
 	
-		<p>Published: <span>{{contentCurrent.publicPublishDate | date}}</span></p>
-
-		<div ng-bind-html="contentCurrent.content"></div>
-		
-		<div ng-if="displayDisqussComments" disqus="contentCurrent.key"></div>
-		
 	</div>
-	<div class="unit one-quarter">
-
-		<strong>Recent articles</strong>
-		
-		<ul>
-			<li ng-repeat="contentEntry in blog.contentEntryList">
-				
-				<!-- Link click will not refresh the page, but content is loaded and URL is updated -->
-				
-				<a href="{{contentEntry.blogUrl}}" class="link">{{contentEntry.title}}</a> 
-			</li>
-		</ul>
-		
-	</div>
-
-	
 </div>
