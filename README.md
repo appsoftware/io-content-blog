@@ -22,9 +22,9 @@ This example pulls content hosted in our 'blog-example' sub account. You'll need
 Once you have an account at I/O Content, open up app.js and edit blogConfig at the top of the file:
 
 
-// *********************************************
-// Edit blog config as required
-// *********************************************
+	// *********************************************
+	// Edit blog config as required
+	// *********************************************
 
 	blogConfig = {
 		
