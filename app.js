@@ -24,7 +24,7 @@ blogConfig = {
 	// Replace to change blog logo. Below is set to use I/O Content asset CDN using
 	// a url generated in I/O content asset management area
 	
-	logoImageSrc: 'https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?max-height=80',
+	logoImageSrc: 'https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80',
 	
 	// Replace to change blog strapline txt
 	
@@ -92,10 +92,10 @@ blogConfig = {
 				
 				return '/#!/blog/' + contentKey + '/' + toHypenCase(contentTitle);
 			}
-			
-			// Simple routing mechanism using Angulars location service
-			
+
 			var contentKey = $routeParams.contentKey; 
+
+			$scope.blogConfig = blogConfig;
 
 			// Set up I/O Content ContentClient and configure sub account and 
 			// content type.
@@ -105,30 +105,32 @@ blogConfig = {
 			contentClient.contentClientBaseParameters.subAccountKey = blogConfig.ioContentSubAccountKey;
 			contentClient.contentClientBaseParameters.contentType = blogConfig.ioContentContentType;
 
-			$scope.contentCurrent = {};
-
-			$scope.blogConfig = blogConfig;
+			$scope.articleCurrent = {};
 
 			$scope.blog = {
 
-				contentEntryList: [],
+				articleCurrent: {},
+
+				articleNavList: [],
 				
-				loadSingleBlogEntry: function (contentKey) {
+				loadSingleArticle: function (contentKey) {
+
+					var blog = this;
 
 					// Load full content for a single blog article
 
 					var apiCallBack = function (responseJson) {
 
-						var responseObj = JSON.parse(responseJson);
+						var contentApiResponse = JSON.parse(responseJson);
 
 						// In JS api, an array of content objects is always returned, even
 						// where the query would always limit the result set to a single content entity
 						
-						var contentCurrent = responseObj[0];
+						var articleCurrent = contentApiResponse.data[0];
 
-						$scope.contentCurrent = contentCurrent;
+						blog.articleCurrent = articleCurrent;
 						
-						console.log($scope.contentCurrent)
+						console.log(blog.articleCurrent)
 						
 						// Scope apply as this callback as async event
 						// not monitored by Angular
@@ -138,9 +140,9 @@ blogConfig = {
 						// Doc title needs to be set in plain JS as is out of scope of
 						// view controller
 						
-						if(contentCurrent && contentCurrent.title)
+						if(articleCurrent && articleCurrent.title)
 						{
-							document.title = contentCurrent.title;
+							document.title = articleCurrent.title;
 						}
 					}
 					
@@ -150,7 +152,7 @@ blogConfig = {
 
 					contentClient.get(query, apiCallBack);
 				},
-				loadContentEntryList: function() {
+				loadArticleNavList: function() {
 					
 					// Load a list of blog artciles to allow user to navigate
 					
@@ -158,21 +160,23 @@ blogConfig = {
 					
 					var apiCallBack = function (responseJson) {
 
-						blog.contentEntryList = JSON.parse(responseJson); // [] of content entries
-						
-						for(var i= 0; i < blog.contentEntryList.length; i++)
+						var contentApiResponse = JSON.parse(responseJson);
+
+						blog.articleNavList = contentApiResponse.data;
+
+						for(var i= 0; i < blog.articleNavList.length; i++)
 						{
-							blog.contentEntryList[i].blogUrl = getBlogUrl(blog.contentEntryList[i].key, toHypenCase(blog.contentEntryList[i].title));
+							blog.articleNavList[i].blogUrl = getBlogUrl(blog.articleNavList[i].key, toHypenCase(blog.articleNavList[i].title));
 						}
 						
 						// If content key is not loaded on the route, load the most recent
 						// blog entry from the list
 						
-						var loadKey = contentKey != null ? contentKey : blog.contentEntryList[0].key;
-						
 						if(!$scope.contentKey)
 						{
-							$scope.blog.loadSingleBlogEntry(loadKey);
+							var loadKey = contentKey != null ? contentKey : blog.articleNavList[0].key;
+
+							blog.loadSingleArticle(loadKey);
 						}
 						
 						// Scope apply as this callback as async event
@@ -180,11 +184,12 @@ blogConfig = {
 						
 						$scope.$apply();
 					}
+
+					// Query specifies get content entries in descending order (by custom publicPublishDate field)
+					// limit to the 20 most recent entries, and restrict the properties (select) to key and title, as
+					// we don't need the full content entry for a navigation list
 					
-					// Since we are simply pulling all articles for purpose of creating side nav, 
-					// only need to specify.
-					
-					var query = 'orderByDescending=publicPublishDate&limit=20';
+					var query = 'orderByDescending=publicPublishDate&pageNumber=1&pageSize=30&select=key+title';
 
 					contentClient.get(query, apiCallBack);
 				}
@@ -192,11 +197,11 @@ blogConfig = {
 
 			// Init
 
-			$scope.blog.loadContentEntryList();
+			$scope.blog.loadArticleNavList();
 			
 			if($scope.contentKey)
 			{
-				$scope.blog.loadSingleBlogEntry($scope.contentKey);
+				$scope.blog.loadSingleArticle($scope.contentKey);
 			}
 		}]);
 
