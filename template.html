@@ -5,7 +5,7 @@
 		<div class="unit whole">
 	
 			<div>
-				<img ng-src="{{blogConfig.logoImageSrc}}" alt="logo" />
+				<a href="https://www.iocontent.com"><img ng-src="{{blogConfig.logoImageSrc}}" alt="logo" /></a>
 			</div>
 			<div class="strapline">
 				<p>{{blogConfig.strapLineText}}</p>
@@ -19,7 +19,7 @@
 		
 		<div class="unit three-quarters">
 	
-			<div><strong><a href="/">Home</a></strong> <span>/</span> <strong>{{contentCurrent.title}}</strong></div> 
+			<div><strong><a href="/#!/">Home</a></strong> <span>/</span> {{blog.articleCurrent.title}}</div> 
 			
 			<h1>{{blog.articleCurrent.title}}</h1>
 		
@@ -28,6 +28,8 @@
 			<div ng-bind-html="blog.articleCurrent.content"></div>
 			
 			<div ng-if="blogConfig.disqusShortName" disqus="blog.articleCurrent.key"></div>
+			
+			<p><a href="https://www.iocontent.com">Powered by I/O Content - The API driven CMS</a></p>
 			
 		</div>
 		<div class="unit one-quarter">
