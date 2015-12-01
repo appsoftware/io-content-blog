@@ -1,8 +1,8 @@
 # I/O Content Blog
 
-## A simple HTML, JS and CSS blog backed by [I/O Content](http://www.icontent.com) API driven CMS
+## A simple HTML, JS and CSS blog backed by [I/O Content](http://www.iocontent.com) API driven CMS
 
-This simple blog is the official I/O Content blog code, and an example of how [I/O Content](http://www.icontent.com) can be used to manage content for websites. You can also use this example to run your blog using content in your I/O Content account. The blog includes optional [Disqus](https://disqus.com/) comments integration
+This simple blog is the official I/O Content blog code, and an example of how [I/O Content](http://www.iocontent.com) can be used to manage content for websites. You can also use this example to run your blog using content in your I/O Content account. The blog includes optional [Disqus](https://disqus.com/) comments integration
 
 
 The **[Demo](http://blog.iocontent.com/)** is hosted on Amazon S3 using S3's [static website](http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html) feature. It could also be hosted on [GitHub pages](https://pages.github.com/) or any other static website hosting.
