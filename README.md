@@ -11,7 +11,7 @@ This blog uses simple HTML, JS and CSS, backed by the I/O Content API which serv
 
 The required files required to run this blog are the `index.html`, `template.html`, `app.js`, `style.css`  and the `bower_components` folder.
 
-![alternate text](https://cdn.iocontent.com/api/v1.0/assets/rimm2eskcb7fub66hczrfoqcpd/20151118-124147243/bbcj/iocontent-blog-deploy-files.png)
+![blog deploy files](https://cdn.iocontent.com/v1.0/assets/rimm2eskcb7fub66hczrfoqcpd/20151118-124147243/bbcj/iocontent-blog-deploy-files.png)
 
 *Note this blog is not available as a bower package, and all dependencies have been copied to the respository so you can simply copy deploy this website on any web server. This will not run from the local file system, so you will need to run via your local web server (e.g. Apache / IIS) to test.*
 
