@@ -140,4 +140,4 @@ Other file types are also served over the CDN in the same manner.
 
 Which retrieves the following image:
 
-![io content logo](https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80)
+![io content logo](https://cdn.iocontent.com/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80)
