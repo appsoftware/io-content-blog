@@ -30,3 +30,10 @@ div#content-main ul li {
 	border-bottom: 1px solid #efefef;
 	padding: 10px 0;
 }
+
+p.summary
+{
+	color: #666;
+	padding: 10px;
+	background-color: #efefef;
+}

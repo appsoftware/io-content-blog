@@ -22,14 +22,15 @@
     "test",
     "tests"
   ],
-  "version": "1.1.2",
-  "_release": "1.1.2",
+  "version": "1.2.1",
+  "_release": "1.2.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.1.2",
-    "commit": "d10f75e08a73ec2e0fab5bf0c475cf406699867c"
+    "tag": "v1.2.1",
+    "commit": "5184cca3d549ae437faa6f9dee7c5a6d6751f83c"
   },
   "_source": "git://github.com/appsoftware/io-content-js.git",
-  "_target": "~1.1.2",
-  "_originalSource": "io-content-js"
+  "_target": "~1.2.1",
+  "_originalSource": "io-content-js",
+  "_direct": true
 }

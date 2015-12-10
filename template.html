@@ -23,9 +23,13 @@
 			
 			<h1>{{blog.articleCurrent.title}}</h1>
 		
+			<p class="summary" ng-if="blog.articleCurrent.summary">{{blog.articleCurrent.summary}}</p>
+		
 			<p>Published: <span>{{blog.articleCurrent.publicPublishDate | date}}</span></p>
 	
 			<div ng-bind-html="blog.articleCurrent.content"></div>
+			
+			<p>Author: {{blog.articleCurrent.author}}</p>
 			
 			<div ng-if="blogConfig.disqusShortName" disqus="blog.articleCurrent.key"></div>
 			

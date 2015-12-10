@@ -24,7 +24,7 @@ blogConfig = {
 	// Replace to change blog logo. Below is set to use I/O Content asset CDN using
 	// a url generated in I/O content asset management area
 	
-	logoImageSrc: 'https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80',
+	logoImageSrc: 'https://cdn.iocontent.com/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151209-161905637/rh2v/iocontent-blocks-logo-1454-x-7069.png?maxHeight=80',
 	
 	// Replace to change blog strapline txt
 	
