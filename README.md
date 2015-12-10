@@ -1,8 +1,8 @@
 # I/O Content Blog
 
-## A simple HTML, JS and CSS blog backed by [I/O Content](http://www.icontent.com) API driven CMS
+## A simple HTML, JS and CSS blog backed by [I/O Content](http://www.iocontent.com) API driven CMS
 
-This simple blog is the official I/O Content blog code, and an example of how [I/O Content](http://www.icontent.com) can be used to manage content for websites. You can also use this example to run your blog using content in your I/O Content account. The blog includes optional [Disqus](https://disqus.com/) comments integration
+This simple blog is the official I/O Content blog code, and an example of how [I/O Content](http://www.iocontent.com) can be used to manage content for websites. You can also use this example to run your blog using content in your I/O Content account. The blog includes optional [Disqus](https://disqus.com/) comments integration
 
 
 The **[Demo](http://blog.iocontent.com/)** is hosted on Amazon S3 using S3's [static website](http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html) feature. It could also be hosted on [GitHub pages](https://pages.github.com/) or any other static website hosting.
@@ -11,7 +11,7 @@ This blog uses simple HTML, JS and CSS, backed by the I/O Content API which serv
 
 The required files required to run this blog are the `index.html`, `template.html`, `app.js`, `style.css`  and the `bower_components` folder.
 
-![alternate text](https://cdn.iocontent.com/api/v1.0/assets/rimm2eskcb7fub66hczrfoqcpd/20151118-124147243/bbcj/iocontent-blog-deploy-files.png)
+![blog deploy files](https://cdn.iocontent.com/v1.0/assets/rimm2eskcb7fub66hczrfoqcpd/20151118-124147243/bbcj/iocontent-blog-deploy-files.png)
 
 *Note this blog is not available as a bower package, and all dependencies have been copied to the respository so you can simply copy deploy this website on any web server. This will not run from the local file system, so you will need to run via your local web server (e.g. Apache / IIS) to test.*
 
@@ -135,9 +135,9 @@ Other file types are also served over the CDN in the same manner.
 
 
 	<div>
-		<img src="https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80" alt="logo" />
+		<img src="https://cdn.iocontent.com/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80" alt="logo" />
 	</div>
 
 Which retrieves the following image:
 
-![io content logo](https://cdn.iocontent.com/api/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80)
+![io content logo](https://cdn.iocontent.com/v1.0/assets/nfm6dwvsmrd6uukgj3rzdugerc/20151113-091052578/tcm1/iocontent-blocks-logo-335-x-1149.png?maxHeight=80)
